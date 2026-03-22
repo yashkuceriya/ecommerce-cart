@@ -156,6 +156,15 @@ CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:5173',
     'http://127.0.0.1:5179',
 ]
+
+# Allow Render/Railway frontend domains
+CORS_EXTRA = os.environ.get('CORS_ALLOWED_ORIGINS', '')
+if CORS_EXTRA:
+    CORS_ALLOWED_ORIGINS += [o.strip() for o in CORS_EXTRA.split(',') if o.strip()]
+
+if not DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True  # For demo deployment; lock down in real production
+
 CORS_ALLOW_CREDENTIALS = True
 
 # Payment

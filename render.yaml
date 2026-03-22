@@ -3,17 +3,21 @@ services:
     name: ecommerce-backend
     runtime: python
     rootDir: backend
-    buildCommand: pip install -r requirements.txt && python manage.py migrate && python manage.py seed_problem_statements && python manage.py seed_demo_data && python manage.py seed_full_catalog
-    startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 3
+    buildCommand: pip install -r requirements.txt
+    startCommand: python manage.py migrate && python manage.py seed_problem_statements && python manage.py seed_demo_data && python manage.py seed_full_catalog && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 3 --timeout 120
     envVars:
       - key: DB_ENGINE
         value: sqlite
       - key: DEBUG
         value: "False"
       - key: ALLOWED_HOSTS
-        value: ".onrender.com"
+        value: ".onrender.com,localhost"
       - key: PAYMENT_BACKEND
         value: mock
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: PYTHON_VERSION
+        value: "3.12.0"
 
   - type: web
     name: ecommerce-frontend
@@ -21,10 +25,14 @@ services:
     rootDir: frontend
     buildCommand: npm ci && npx vite build
     staticPublishPath: dist
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=3600
     routes:
-      - type: rewrite
-        source: /api/*
-        destination: https://ecommerce-backend.onrender.com/api/*
       - type: rewrite
         source: /*
         destination: /index.html
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
