@@ -11,6 +11,7 @@ COPY . .
 
 RUN python manage.py collectstatic --noinput 2>/dev/null || true
 
+ENV PORT=8050
 EXPOSE 8050
 
-CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8050", "--workers", "3", "--timeout", "120"]
+CMD gunicorn config.wsgi:application --bind 0.0.0.0:${PORT} --workers 3 --timeout 120
