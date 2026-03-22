@@ -30,7 +30,8 @@ import Directory from './pages/community/Directory';
 import ConversationList from './pages/community/ConversationList';
 import ConversationDetail from './pages/community/ConversationDetail';
 import Moderation from './pages/admin/Moderation';
-import Analytics from './pages/admin/Analytics';
+import { lazy, Suspense } from 'react';
+const Analytics = lazy(() => import('./pages/admin/Analytics'));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -99,7 +100,7 @@ export default function App() {
                   <Route path="/community/messages" element={<ProtectedRoute><ConversationList /></ProtectedRoute>} />
                   <Route path="/community/messages/:id" element={<ProtectedRoute><ConversationDetail /></ProtectedRoute>} />
                   <Route path="/admin/moderation" element={<ProtectedRoute adminOnly><Moderation /></ProtectedRoute>} />
-                  <Route path="/admin/analytics" element={<ProtectedRoute adminOnly><Analytics /></ProtectedRoute>} />
+                  <Route path="/admin/analytics" element={<ProtectedRoute adminOnly><Suspense fallback={<div className="flex justify-center py-24"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#191c1e]"></div></div>}><Analytics /></Suspense></ProtectedRoute>} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>

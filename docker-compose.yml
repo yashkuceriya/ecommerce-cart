@@ -1,21 +1,62 @@
-version: '3.8'
-
 services:
   db:
-    image: pgvector/pgvector:pg16
+    image: postgres:16-alpine
     environment:
       POSTGRES_DB: upstream
       POSTGRES_USER: upstream
       POSTGRES_PASSWORD: upstream_dev
-    ports:
-      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U upstream"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
-  redis:
-    image: redis:7-alpine
+  backend:
+    build: ./backend
     ports:
-      - "6379:6379"
+      - "8050:8050"
+    environment:
+      - DB_ENGINE=postgresql
+      - DB_NAME=upstream
+      - DB_USER=upstream
+      - DB_PASSWORD=upstream_dev
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DEBUG=True
+      - ALLOWED_HOSTS=localhost,127.0.0.1,backend
+      - PAYMENT_BACKEND=mock
+    volumes:
+      - backend_media:/app/media
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      sh -c "
+        python manage.py migrate &&
+        python manage.py seed_problem_statements &&
+        python manage.py seed_demo_data &&
+        python manage.py seed_full_catalog &&
+        python manage.py shell -c \"
+from django.contrib.auth import get_user_model
+User = get_user_model()
+if not User.objects.filter(username='admin').exists():
+    u = User.objects.create_superuser('admin', 'admin@test.com', 'admin123')
+    u.role = 'admin'
+    u.first_name = 'Admin'
+    u.save()
+\" &&
+        gunicorn config.wsgi:application --bind 0.0.0.0:8050 --workers 3 --timeout 120
+      "
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5179:5179"
+    depends_on:
+      - backend
 
 volumes:
   pgdata:
+  backend_media:

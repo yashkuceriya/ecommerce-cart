@@ -1,0 +1,8 @@
+[build]
+builder = "dockerfile"
+dockerfilePath = "backend/Dockerfile"
+
+[deploy]
+startCommand = "cd /app && python manage.py migrate && python manage.py seed_problem_statements && python manage.py seed_demo_data && python manage.py seed_full_catalog && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 3"
+healthcheckPath = "/api/health/"
+restartPolicyType = "on_failure"
