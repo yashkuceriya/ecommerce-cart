@@ -155,10 +155,13 @@ class Command(BaseCommand):
         icon_keys = list(ICONS.keys())
         for i, product in enumerate(existing):
             if not product.image:
-                svg = generate_product_svg(product.name, i, icon_keys[i % len(icon_keys)])
-                filename = f'{product.slug}.svg'
-                product.image.save(filename, ContentFile(svg.encode()), save=True)
-                self.stdout.write(f'Image: {product.name}')
+                try:
+                    svg = generate_product_svg(product.name, i, icon_keys[i % len(icon_keys)])
+                    filename = f'{product.slug}.svg'
+                    product.image.save(filename, ContentFile(svg.encode()), save=True)
+                    self.stdout.write(f'Image: {product.name}')
+                except Exception:
+                    self.stdout.write(f'Skip image: {product.name}')
 
         # Create new products
         created = 0
@@ -181,9 +184,12 @@ class Command(BaseCommand):
             if was_created:
                 created += 1
             if not product.image:
-                svg = generate_product_svg(product.name, i + len(existing), p.get('icon', 'book'))
-                filename = f'{product.slug}.svg'
-                product.image.save(filename, ContentFile(svg.encode()), save=True)
+                try:
+                    svg = generate_product_svg(product.name, i + len(existing), p.get('icon', 'book'))
+                    filename = f'{product.slug}.svg'
+                    product.image.save(filename, ContentFile(svg.encode()), save=True)
+                except Exception:
+                    pass
                 self.stdout.write(f'Created: {product.name}')
 
         total = Product.objects.count()

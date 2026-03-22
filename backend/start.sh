@@ -1,15 +1,14 @@
 #!/bin/sh
-set -e
 
-echo "Running migrations..."
+echo "=== Running migrations ==="
 python manage.py migrate --noinput
 
-echo "Seeding data..."
-python manage.py seed_problem_statements 2>/dev/null || true
-python manage.py seed_demo_data 2>/dev/null || true
-python manage.py seed_full_catalog 2>/dev/null || true
+echo "=== Seeding data ==="
+python manage.py seed_problem_statements || echo "seed_problem_statements skipped"
+python manage.py seed_demo_data || echo "seed_demo_data skipped"
+python manage.py seed_full_catalog || echo "seed_full_catalog skipped"
 
-echo "Creating admin..."
+echo "=== Creating admin ==="
 python manage.py shell -c "
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -21,8 +20,8 @@ if not User.objects.filter(username='admin').exists():
     print('Admin created')
 else:
     print('Admin exists')
-" 2>/dev/null || true
+" || echo "admin creation skipped"
 
 PORT="${PORT:-8050}"
-echo "Starting server on port $PORT"
+echo "=== Starting on port $PORT ==="
 exec gunicorn config.wsgi:application --bind "0.0.0.0:$PORT" --workers 3 --timeout 120
