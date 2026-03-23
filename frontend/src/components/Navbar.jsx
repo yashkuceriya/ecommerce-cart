@@ -88,26 +88,26 @@ export default function Navbar() {
               </form>
             ) : (
               <button onClick={() => setSearchOpen(true)} className="p-2 hover:bg-[#f2f4f6] rounded-lg transition-all active:scale-95">
-                <span className="material-symbols-outlined text-[#45464d]">search</span>
+                <svg className="w-5 h-5 text-[#45464d]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
               </button>
             )}
           </div>
 
           {user && (
             <Link to="/wishlist" className="p-2 hover:bg-[#f2f4f6] rounded-lg transition-all active:scale-95">
-              <span className="material-symbols-outlined text-[#45464d]">favorite</span>
+              <svg className="w-5 h-5 text-[#45464d]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" /></svg>
             </Link>
           )}
 
           <Link to="/cart" className="p-2 hover:bg-[#f2f4f6] rounded-lg transition-all active:scale-95 relative">
-            <span className="material-symbols-outlined text-[#45464d]">shopping_cart</span>
+            <svg className="w-5 h-5 text-[#45464d]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-5.98.514m5.98-.514h9.002m0 0a3 3 0 015.98.514m-5.98-.514L7.5 14.25m11.002 0l1.006-3.77A1.125 1.125 0 0018.42 9H7.5m0 0L6.106 5.272" /></svg>
             {cart.item_count > 0 && <span className="absolute top-1 right-1 w-2 h-2 bg-[#009668] rounded-full" />}
           </Link>
 
           {user ? (
             <div className="relative">
               <button onClick={() => setProfileOpen(!profileOpen)} className="p-2 hover:bg-[#f2f4f6] rounded-lg transition-all active:scale-95">
-                <span className="material-symbols-outlined text-[#45464d]">person</span>
+                <svg className="w-5 h-5 text-[#45464d]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0" /></svg>
               </button>
               {profileOpen && (
                 <>
@@ -137,7 +137,9 @@ export default function Navbar() {
           )}
 
           <button className="lg:hidden p-2" onClick={() => setMenuOpen(!menuOpen)}>
-            <span className="material-symbols-outlined">{menuOpen ? 'close' : 'menu'}</span>
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d={menuOpen ? 'M6 18L18 6M6 6l12 12' : 'M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5'} />
+            </svg>
           </button>
         </div>
       </nav>

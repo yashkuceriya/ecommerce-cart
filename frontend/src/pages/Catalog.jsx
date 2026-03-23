@@ -52,13 +52,13 @@ export default function Catalog() {
             <h2 className="font-headline font-bold text-lg mb-6">The Collection</h2>
             <nav className="flex flex-col gap-1">
               <button onClick={() => updateFilter('category', '')}
-                className={`flex items-center gap-3 px-4 py-3 rounded-r-full transition-all text-sm uppercase tracking-widest ${!filters.category ? 'bg-[#f2f4f6] text-[#002113] font-bold' : 'text-[#44474e] hover:pl-6'}`}>
-                <span className="material-symbols-outlined text-sm">auto_awesome</span>All
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all text-xs tracking-wide text-left ${!filters.category ? 'bg-[#f2f4f6] text-[#002113] font-bold' : 'text-[#44474e] hover:bg-[#f2f4f6]'}`}>
+                All Resources
               </button>
               {categories.map(c => (
                 <button key={c.id} onClick={() => updateFilter('category', c.slug)}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-r-full transition-all text-sm uppercase tracking-widest text-left ${filters.category === c.slug ? 'bg-[#f2f4f6] text-[#002113] font-bold' : 'text-[#44474e] hover:pl-6'}`}>
-                  <span className="material-symbols-outlined text-sm">menu_book</span>{c.name}
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all text-xs tracking-wide text-left ${filters.category === c.slug ? 'bg-[#f2f4f6] text-[#002113] font-bold' : 'text-[#44474e] hover:bg-[#f2f4f6]'}`}>
+                  {c.name}
                 </button>
               ))}
             </nav>

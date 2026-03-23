@@ -66,15 +66,17 @@ export default function ProductCard({ product, index = 0 }) {
         )}
         {product.in_stock && (
           <button onClick={handleAdd}
-            className="absolute bottom-4 right-4 bg-[#191c1e] text-white p-3 rounded-full opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-xl hover:bg-[#002113] active:scale-95">
-            <span className="material-symbols-outlined text-lg">add_shopping_cart</span>
+            className="absolute bottom-4 right-4 bg-[#191c1e] text-white w-10 h-10 rounded-full opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-xl hover:bg-[#002113] active:scale-95 flex items-center justify-center">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
           </button>
         )}
       </div>
-      <div className="flex justify-between items-start">
-        <div>
-          <h3 className="font-headline font-bold text-sm group-hover:text-[#497cff] transition-colors uppercase tracking-wide">{product.name}</h3>
-          <p className="text-[10px] uppercase tracking-widest text-[#76777d] mt-0.5">{product.category_name || 'Resource'}</p>
+      <div className="flex justify-between items-start gap-3 mt-3">
+        <div className="min-w-0 flex-1">
+          <h3 className="font-headline font-bold text-sm group-hover:text-[#497cff] transition-colors leading-tight">{product.name}</h3>
+          <p className="text-[10px] text-[#76777d] mt-1">{product.category_name || 'Resource'}</p>
           <StarRating rating={product.avg_rating} count={product.review_count} />
           {product.times_purchased > 50 && (
             <p className="text-[10px] text-[#76777d] mt-1">{product.times_purchased.toLocaleString()}+ purchased</p>
